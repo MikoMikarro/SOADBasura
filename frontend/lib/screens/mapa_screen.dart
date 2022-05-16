@@ -1,14 +1,12 @@
-// ignore_for_file: import_of_legacy_library_into_null_safe
+
 
 import 'dart:async';
 import 'dart:convert';
 
 import 'package:buildgreen/screens/request_permission/request_permission_controller.dart';
-import 'package:buildgreen/services.dart/places_service.dart';
 import 'package:buildgreen/widgets/expandable_action_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter_heatmap/google_maps_flutter_heatmap.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
@@ -35,9 +33,8 @@ List<Marker> markersFromPlaces(List<Place> places) {
 
 class MapaScreen extends StatefulWidget {
   static const route = "/mapa";
-  final String isAdmin;
   
-  const MapaScreen({Key? key, required this.isAdmin}) : super(key: key);
+  const MapaScreen({Key? key}) : super(key: key);
 
   @override
   State<MapaScreen> createState() => _MapaScreenState();
@@ -54,6 +51,7 @@ class _MapaScreenState extends State<MapaScreen> {
   bool showChargers = false;
 
   _MapaScreenState(){
+    /*
     generateItems('/properties/').then((val) => setState(() {
         allMarkers = val;
         },
@@ -65,6 +63,7 @@ class _MapaScreenState extends State<MapaScreen> {
       }
       )
     );
+    */
   }
 
   static const CameraPosition _kBarcelona = CameraPosition(
@@ -133,7 +132,13 @@ class _MapaScreenState extends State<MapaScreen> {
     List<Place> resultado = [];
     for (var current in responseJson) {
       final String route = current['address'] + current['apt'] + ',' +current['postal_code'];
-      Place result =  await PlacesService().getPlaceByName(route);
+      Place result =  Place(
+        name: current['name'],
+        number: current['number'],
+        latitude: double.parse(current['latitud']),
+        longitude: double.parse(current['longitud']),
+        postalCode: ""
+      );
       resultado.add(result);
     }
     return resultado;
@@ -297,18 +302,6 @@ class _MapaScreenState extends State<MapaScreen> {
         child: Column(
           children: [
             const Padding(padding: EdgeInsets.all(10)),
-            /// TITLE
-            Container(
-              alignment: Alignment.topLeft,
-              padding: const EdgeInsets.only(
-                left: 50,
-                top: 10,
-              ),
-              child: Text(
-                AppLocalizations.of(context)!.mapa,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
-              ),
-            ),
             /// MAPS
             Expanded(              
               child: Container(
