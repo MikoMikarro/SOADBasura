@@ -1,2 +1,5 @@
 # SOADBasura
-Sí
+
+
+Lorena Miralles
+Miguel López Cuesta
