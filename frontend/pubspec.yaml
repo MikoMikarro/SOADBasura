@@ -53,11 +53,9 @@ dependencies:
   loader_overlay: ^2.0.6
   flutter_easyloading: ^3.0.3
   email_validator: ^2.0.1
-  flutter_google_places_hoc081098: ^1.0.0-nullsafety.2
   google_places_flutter: ^2.0.5
   location_permission_handler: ^0.0.2
   permission_handler: ^5.1.0+2
-  syncfusion_flutter_charts: ^20.1.55
 
 dev_dependencies:
   flutter_test:
