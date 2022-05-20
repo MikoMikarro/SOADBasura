@@ -3,11 +3,13 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:buildgreen/screens/map_style.dart';
 import 'package:buildgreen/screens/request_permission/request_permission_controller.dart';
 import 'package:buildgreen/widgets/expandable_action_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter_heatmap/google_maps_flutter_heatmap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -42,6 +44,8 @@ class MapaScreen extends StatefulWidget {
 class _MapaScreenState extends State<MapaScreen> {
   final Completer<GoogleMapController> _controller = Completer();
   final _lController = RequestPermissionController();
+  GoogleMapController? _Gcontroller;
+  Location currentLocation = Location();
 
   List<Place> allMarkers = [];
 
@@ -50,8 +54,6 @@ class _MapaScreenState extends State<MapaScreen> {
 
   bool showChargers = false;
 
-  _MapaScreenState(){
-  }
 
   static const CameraPosition _kBarcelona = CameraPosition(
     target: LatLng(41.4026556, 2.1587003),
@@ -166,154 +168,146 @@ class _MapaScreenState extends State<MapaScreen> {
   Widget build(BuildContext context) {
     _lController.request();
     return Scaffold(
-      floatingActionButton: ExpandableFab(
-        distance: 112.0,
-        children: [
-          Container(
-            decoration:  ShapeDecoration(
-              color: (showChargers) ? Colors.red : Colors.pinkAccent ,
-              shape: const CircleBorder(),
-              shadows:const  [
-                BoxShadow(
-                  color: Colors.black26,
-                  offset: Offset(3, 3),
-                  blurRadius: 5
-                )
-              ]
-            ),
-            child: IconButton(
-              onPressed: (){
-                Scaffold.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Cargadores de Barcelona'),
-                    duration: Duration(seconds: 1),
-                    
-                  ),
-                );
-                setState(() {
-                showChargers = !showChargers;
-              });},
-              icon: const Icon(Icons.power),
-              color: Colors.white,
-              
-            ),
-          ),
-
-          Container(
-            decoration:  const ShapeDecoration(
-              color: Colors.orangeAccent,
-              shape: CircleBorder(),
-              shadows: [
-                BoxShadow(
-                  color: Colors.black26,
-                  offset: Offset(3, 3),
-                  blurRadius: 5
-                )
-              ]
-            ),
-            child: IconButton(
-              onPressed: (){
-                Scaffold.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Ningún mapa de color'),
-                    duration: Duration(seconds: 1),
-                    
-                  ),
-                );
-                setState(() {
-                _heatmaps.clear();
-              });},
-              icon: const Icon(Icons.location_off_rounded),
-              color: Colors.white,
-              
-            ),
-          ),
-
-          Container(
-            decoration:  const ShapeDecoration(
-              color: Colors.lightBlueAccent,
-              shape: CircleBorder(),
-              shadows: [
-                BoxShadow(
-                  color: Colors.black26,
-                  offset: Offset(3, 3),
-                  blurRadius: 5
-                )
-              ]
-            ),
-            child: IconButton(
-              onPressed: (){
-                Scaffold.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Certificado eléctrico'),
-                    duration: Duration(seconds: 1),
-                    
-                  ),
-                );
-                getHeatMap('/qualificationMap');},
-              icon: const Icon(Icons.toys_rounded),
-              color: Colors.white,
-            ),
-          ),
-          Container(
-            decoration:  const ShapeDecoration(
-              color: Colors.green,
-              shape: CircleBorder(),
-              shadows: [
-                BoxShadow(
-                  color: Colors.black26,
-                  offset: Offset(3, 3),
-                  blurRadius: 5
-                )
-              ]
-            ),
-            child: IconButton(
-              onPressed: (){
-                Scaffold.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Emisiones de CO2'),
-                    duration: Duration(seconds: 1),
-                  ),
-                );
-                getHeatMap('/co2map');},
-              iconSize: 40,
-              icon: const Icon(Icons.co2),
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
       body: SafeArea(
-        child: Column(
+        child: Stack(
+
           children: [
-            const Padding(padding: EdgeInsets.all(10)),
-            /// MAPS
-            Expanded(              
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child: GoogleMap(
-                  initialCameraPosition: _kBarcelona,
-                  heatmaps: _heatmaps,
-                  compassEnabled: true,
-                  rotateGesturesEnabled: false,
-                  mapType: MapType.hybrid,
-                  buildingsEnabled: true,
-                  mapToolbarEnabled: true,
-                  cameraTargetBounds: CameraTargetBounds.unbounded,
-                  myLocationButtonEnabled: true,
-                  myLocationEnabled: true,
-                  zoomGesturesEnabled: true,
-                  markers:  (allMarkersReal +  ((showChargers)? allChargers : [])).toSet(),
-                  indoorViewEnabled: false,
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller.complete(controller);
-                  },
-                ),
+            Container(
+              decoration: const BoxDecoration(
+                 gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [
+                    Color.fromARGB(255, 56, 22, 65),
+                    Color.fromARGB(255, 0, 0, 0),
+                  ],)
               ),
             ),
-          ],
+            Column(
+            children: [
+              /// MAPS
+              Expanded(    
+                flex: 1,          
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                      boxShadow: const[
+                        BoxShadow(
+                          color: Colors.green,
+                          blurRadius: 10,
+                          spreadRadius: 10,
+                          offset: Offset(0, 0),
+                        ),
+                      ]
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: GoogleMap(
+                        initialCameraPosition: _kBarcelona,
+                        heatmaps: _heatmaps,
+                        compassEnabled: true,
+                        myLocationButtonEnabled: true,
+                        myLocationEnabled: true,
+                        zoomGesturesEnabled: true,
+                        buildingsEnabled: false,
+                        markers:  (allMarkersReal +  ((showChargers)? allChargers : [])).toSet(),
+                        indoorViewEnabled: false,
+                        onMapCreated: (GoogleMapController controller) async {
+                          _controller.complete(controller);
+                          final location = await currentLocation.getLocation();
+                          _Gcontroller = controller;
+                          controller.animateCamera(CameraUpdate.newCameraPosition(
+                            CameraPosition(
+                              target: LatLng(location.latitude??0.0, location.longitude??0.0),
+                              zoom: 17,
+                              tilt: 45,
+                            ),
+                          ));
+                          setState(() {
+                            controller.setMapStyle(mapStyle);  
+                          });
+                          
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                padding: EdgeInsets.all(20),
+                child: ElevatedButton(
+                    onPressed: (){
+                      
+                    },
+                    style: ElevatedButton.styleFrom(
+                      elevation: 10,
+                      shadowColor: Colors.white,
+                      primary: Colors.yellowAccent,
+                      side: BorderSide(color: Color.fromARGB(255, 60, 33, 105), width: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [Container(
+                        padding: EdgeInsets.fromLTRB(0,0,0,20),
+                        child: const Text("ADD CRAP",style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Mustasurma',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.deepPurpleAccent,
+                        ),),
+                      ),
+                      ]
+                    )),
+              ),
+                  )
+              ,Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  child: ElevatedButton(
+                    onPressed: (){
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.lightGreenAccent,
+                      shadowColor: Colors.white,
+                      elevation: 10,
+                      side: BorderSide(color: Colors.pinkAccent, width: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [Container(
+                        padding: EdgeInsets.fromLTRB(0,0,0,20),
+                        child: const Text("I'M STUCK",style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Mustasurma',
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 69, 42, 142),
+                        ),),
+                      ),
+                      ]
+                    )),
+                ),
+              )
+                ],
+              ),
+              
+            
+            ],
+          ),
+          ]
         ),
       ),
     );

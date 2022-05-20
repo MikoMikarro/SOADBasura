@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui' as ui;
 
+import 'package:buildgreen/screens/mapa_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:glitcheffect/glitcheffect.dart';
@@ -112,7 +113,9 @@ class _NeonHorizonState extends State<NeonHorizon> with SingleTickerProviderStat
                 child: ElevatedButton(
                   
 
-                  onPressed: (){},
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const MapaScreen()));
+                  },
                   style: ElevatedButton.styleFrom(
                     primary: Colors.yellowAccent,
                     side: BorderSide(color: Color.fromARGB(255, 60, 33, 105), width: 10),
@@ -123,10 +126,10 @@ class _NeonHorizonState extends State<NeonHorizon> with SingleTickerProviderStat
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [Container(
-                      padding: EdgeInsets.all(30),
-                      child: const Text("GO !!!",style: TextStyle(
-                        fontSize: 60,
-                        fontFamily: 'Roboto',
+                      padding: EdgeInsets.fromLTRB(0,0,0,40),
+                      child: const Text("START",style: TextStyle(
+                        fontSize: 50,
+                        fontFamily: 'Mustasurma',
                         fontWeight: FontWeight.bold,
                         color: Colors.deepPurpleAccent,
                       ),),

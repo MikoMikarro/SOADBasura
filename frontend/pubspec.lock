@@ -28,7 +28,7 @@ packages:
       name: back_button_interceptor
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.2"
+    version: "6.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -321,7 +321,14 @@ packages:
       name: loader_overlay
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.6"
+    version: "2.0.7"
+  location:
+    dependency: "direct main"
+    description:
+      name: location
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.5.4"
   location_permission_handler:
     dependency: "direct main"
     description:
