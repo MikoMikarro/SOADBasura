@@ -56,6 +56,8 @@ dependencies:
   google_places_flutter: ^2.0.5
   location_permission_handler: ^0.0.2
   permission_handler: ^5.1.0+2
+  glitcheffect: ^1.0.2
+  flutter_glow: ^0.2.0
 
 dev_dependencies:
   flutter_test:

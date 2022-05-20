@@ -51,19 +51,6 @@ class _MapaScreenState extends State<MapaScreen> {
   bool showChargers = false;
 
   _MapaScreenState(){
-    /*
-    generateItems('/properties/').then((val) => setState(() {
-        allMarkers = val;
-        },
-      ),
-    );
-    generateCargadores().then((value) => 
-      setState(() {
-        allChargers = value;
-      }
-      )
-    );
-    */
   }
 
   static const CameraPosition _kBarcelona = CameraPosition(
