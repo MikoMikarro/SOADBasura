@@ -4,6 +4,9 @@ from flask import Flask, jsonify, request
 # Import SQLAlchemy
 from flask_sqlalchemy import SQLAlchemy
 
+import uuid
+from sqlalchemy.dialects.postgresql import UUID
+
 # Define the WSGI application object
 app = Flask(__name__)
 
@@ -34,7 +37,7 @@ def new_truck_observed():
     if not (request.json and 'long' in request.json and 'lat' in request.json):
         return jsonify({'msg':'Missing arguments long or lat'}), 400
 
-    new_truck = Truck(request.json['lat'], request.json['long'], datetime.now())
+    new_truck = Truck(uuid.uuid4(), request.json['lat'], request.json['long'], datetime.now())
     new_truck.save()
 
     return jsonify(new_truck.toJSON()), 201
@@ -51,7 +54,7 @@ def new_garbage_observed():
     if not (request.json and 'long' in request.json and 'lat' in request.json):
         return jsonify({'msg':'Missing arguments long or lat'}), 400
 
-    new_garbage = Garbage(request.json['lat'], request.json['long'], datetime.now())
+    new_garbage = Garbage(uuid.uuid4(), request.json['lat'], request.json['long'], datetime.now())
     new_garbage.save()
 
     return jsonify(new_garbage.toJSON()), 201
@@ -60,12 +63,13 @@ def new_garbage_observed():
 
 class Truck(db.Model):
     __tablename__ = 'truck'
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4())
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     observedAt = db.Column(db.DateTime)
 
-    def __init__(self, latitude, longitude, observedAt):
-        
+    def __init__(self, id, latitude, longitude, observedAt):
+        self.id = id
         self.latitude = latitude
         self.longitude = longitude
         self.observedAt = observedAt
@@ -82,13 +86,14 @@ class Truck(db.Model):
         return {"lat": self.latitude, "long": self.longitude, "time": self.observedAt}
 
 class Garbage(db.Model):
-    __tablename__ = 'truck'
+    __tablename__ = 'garbage'
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4())
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     observedAt = db.Column(db.DateTime)
 
     def __init__(self, latitude, longitude, observedAt):
-        
+        self.id = id
         self.latitude = latitude
         self.longitude = longitude
         self.observedAt = observedAt
