@@ -1,6 +1,7 @@
 
 
 import 'package:buildgreen/screens/mapa_screen.dart';
+import 'package:buildgreen/screens/welcome_screen.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:flutter/material.dart';
@@ -21,11 +22,6 @@ class MyApp extends StatefulWidget {
 late Locale _locale = const Locale('es', 'ES');
 
 class _MyAppState extends State<MyApp> {
-  void setLocale(Locale value) {
-    setState(() {
-      _locale = value;
-    });
-  }
 
   // This widget is the root of your application.
   @override
@@ -52,7 +48,7 @@ class _MyAppState extends State<MyApp> {
           Locale('es', 'ES'),
           Locale('ca', 'CAT'),
         ],
-        home: MapaScreen(),
+        home: NeonHorizon(color: Colors.purple),
         builder: EasyLoading.init(),
         
     );

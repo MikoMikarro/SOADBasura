@@ -27,3 +27,4 @@ CSRF_SESSION_KEY = os.getenv('API_SECRET_KEY')
 
 # Secret key for signing cookies
 SECRET_KEY = os.getenv('API_SECRET_KEY')
+

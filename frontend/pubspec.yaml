@@ -56,6 +56,9 @@ dependencies:
   google_places_flutter: ^2.0.5
   location_permission_handler: ^0.0.2
   permission_handler: ^5.1.0+2
+  glitcheffect: ^1.0.2
+  flutter_glow: ^0.2.0
+  location: ^2.5.4
 
 dev_dependencies:
   flutter_test:
@@ -79,7 +82,10 @@ flutter:
   assets:
     - assets/images/
 
-
+  fonts:
+    - family: Mustasurma
+      fonts:
+        - asset: assets/fonts/Mustasurma.ttf
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
