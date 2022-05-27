@@ -8,7 +8,7 @@ DEBUG = os.getenv('API_DEBUG')
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))  
 
 # Define the database we are working with 
-SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
+SQLALCHEMY_DATABASE_URI = os.getenv('postgres://puwizfmfhlnynq:cb0380105bfea3534933959b4fd1b3385bafd8c99711dd5954ac335193396ef5@ec2-176-34-211-0.eu-west-1.compute.amazonaws.com:5432/d7at1rnr5iivvg')
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 DATABASE_CONNECT_OPTIONS = {}
 
