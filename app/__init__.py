@@ -92,7 +92,7 @@ class Garbage(db.Model):
     longitude = db.Column(db.Float)
     observedat = db.Column(db.DateTime)
 
-    def __init__(self, latitude, longitude, observedat):
+    def __init__(self, id, latitude, longitude, observedat):
         self.id = id
         self.latitude = latitude
         self.longitude = longitude
