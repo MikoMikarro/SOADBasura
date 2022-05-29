@@ -7,8 +7,11 @@ from flask_sqlalchemy import SQLAlchemy
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 
+from flask_cors import CORS
+
 # Define the WSGI application object
 app = Flask(__name__)
+CORS(app, resources=r'*', origins=r'*')
 
 # Configurations
 app.config.from_object('config')
