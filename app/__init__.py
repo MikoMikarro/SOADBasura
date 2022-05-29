@@ -28,7 +28,7 @@ def homepage():
 # Returns garbage seen during the last hour
 @app.route('/trucks', methods=['GET'])
 def last_hour_trucks():
-    trucks = Truck.query.filter(Truck.observedAt >= datetime.now()-timedelta(hours=1)).all()
+    trucks = Truck.query.filter(Truck.observedat >= datetime.now()-timedelta(hours=1)).all()
     return jsonify([t.toJSON() for t in trucks]), 200
 
 # Saves a new truck to DB
@@ -45,7 +45,7 @@ def new_truck_observed():
 # Returns garbage seen during the last 24 hours
 @app.route('/garbage', methods=['GET'])
 def last_day_garbage():
-    garbage = Garbage.query.filter(Garbage.observedAt >= datetime.now()-timedelta(days=1)).all()
+    garbage = Garbage.query.filter(Garbage.observedat >= datetime.now()-timedelta(days=1)).all()
     return jsonify([g.toJSON() for g in garbage]), 200
 
 # Saves a new garbage to DB
@@ -66,13 +66,13 @@ class Truck(db.Model):
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4())
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
-    observedAt = db.Column(db.DateTime)
+    observedat = db.Column(db.DateTime)
 
-    def __init__(self, id, latitude, longitude, observedAt):
+    def __init__(self, id, latitude, longitude, observedat):
         self.id = id
         self.latitude = latitude
         self.longitude = longitude
-        self.observedAt = observedAt
+        self.observedat = observedat
 
     def save(self):
         db.session.add(self)
@@ -83,20 +83,20 @@ class Truck(db.Model):
         db.session.commit()
 
     def toJSON(self):
-        return {"lat": self.latitude, "long": self.longitude, "time": self.observedAt}
+        return {"lat": self.latitude, "long": self.longitude, "time": self.observedat}
 
 class Garbage(db.Model):
     __tablename__ = 'garbage'
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4())
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
-    observedAt = db.Column(db.DateTime)
+    observedat = db.Column(db.DateTime)
 
-    def __init__(self, latitude, longitude, observedAt):
+    def __init__(self, latitude, longitude, observedat):
         self.id = id
         self.latitude = latitude
         self.longitude = longitude
-        self.observedAt = observedAt
+        self.observedat = observedat
 
     def save(self):
         db.session.add(self)
@@ -107,4 +107,4 @@ class Garbage(db.Model):
         db.session.commit()
 
     def toJSON(self):
-        return {"lat": self.latitude, "long": self.longitude, "time": self.observedAt}
+        return {"lat": self.latitude, "long": self.longitude, "time": self.observedat}
