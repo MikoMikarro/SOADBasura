@@ -1,0 +1,86 @@
+openapi: 3.0.0
+info:
+  description: |
+    SOAD Basura.
+  version: "0.1.0"
+  title: "SOAD Basura"
+servers:
+  - url: 'https://soadbasura.herokuapp.com/'
+    description: "Production server."
+paths:
+  /:
+    get:
+      responses:
+        "200":
+          description: "Ping."
+          schema:
+            type: string
+  /trucks:
+    get:
+      responses:
+        "200":
+          description: "Get trucks."
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Reply"
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+      responses:
+        "200":
+          description: "Post truck."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reply"
+  /garbage:
+    get:
+      responses:
+        "200":
+          description: "Get garbage."
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Reply"
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+      responses:
+        "200":
+          description: "Post garbage."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reply"
+
+components:
+  schemas:
+    Request:
+      type: object
+      properties:
+        lat:
+          type: string
+        long:
+          type: string
+    Reply:
+      type: object
+      properties:
+        lat:
+          type: string
+        long:
+          type: string
+        time:
+          type: string
