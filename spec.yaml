@@ -13,8 +13,6 @@ paths:
       responses:
         "200":
           description: "Ping."
-          schema:
-            type: string
   /trucks:
     get:
       responses:
@@ -71,9 +69,9 @@ components:
     Request:
       type: object
       properties:
-        lat:
-          type: string
         long:
+          type: string
+        lat:
           type: string
     Reply:
       type: object
